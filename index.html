@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./style.css" rel="stylesheet" />
+    <script src="./library.js"></script>
+    <script src="./action.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <h1>Welcome to MIU Library</h1>
+        <!-- <label>Please enter your name if you are a member:</label>
+        <input type="text" id="student_name" />
+        <button onclick="pullInfo()">Pull Info</button><span id="info">Enter your name and click Pull Info
+            button</span><br /> -->
+        <button onclick="add(event)" value="Book 1"><img src="./images/Book 1.jpg" width="150" height="200" /></button>
+        <button onclick="add(event)" value="Book 2"><img src="./images/Book 2.jpg" width="150" height="200" /></button>
+        <button onclick="add(event)" value="Book 3"><img src="./images/Book 3.jpg" width="150" height="200"></button>
+        <button onclick="add(event)" value="Book 4"><img src="./images/alchemist.jpg" width="150" height="200"></button>
+
+        <table id="shopping_cart">
+            <caption>Selected Books Cart</caption>
+            <tr>
+                <th>Item</th>
+                <th>Return Due Date</th>
+                <th>ISBN number</th>
+
+            </tr>
+        </table>
+
+        <br /><br /><button id="btn-purchase" onclick="makePurchase()">Purchase</button>
+        <button id="btn-reset" onclick="resetShoppingCart()">Reset</button>
+    </div>
+</body>
+
+</html>
