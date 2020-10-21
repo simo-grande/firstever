@@ -1,10 +1,10 @@
 class ApplicationError extends Error { };
 
 class Student {
-    constructor(name, password, memberId) {
+    constructor(name, password, membership) {
         this._name = name;
         this.password = password;
-        this._memberId = memberId;
+        this._membership = membership;
 
     }
 
@@ -22,59 +22,78 @@ class Student {
         this._password = password;
     }
 
-    get memberId() {
-        return this._memberId;
+    get membership() {
+        return this._membership;
     }
 
-    set memberId(memberId) {
-        this._memberId = memberId;
+    set membership(membership) {
+        this._membership = membership;
     }
 
 
-    purchasePoints(points) {
-        this.memberId.addPoints(points);
+    borrowBook(books) {
+        this.account.addBooks(books);
     }
 
-    buyBookItem(bookItem) {
-        if (this.memberId.balance >= bookItem.ret_due_date) {
-            this.memberId.deductPoints(bookItem.ret_due_date);
-        } else {
-            throw new ApplicationError("Insufficient Balance.");
-        }
-    }
+    // buyBookItem(bookItem) {
+    //     if (this.membership.balance >= bookItem.ret_due_date) {
+    //         this.membership.deductPoints(bookItem.ret_due_date);
+    //     } else {
+    //         throw new ApplicationError("Insufficient Balance.");
+    //     }
+    // }
 }
 
-class MemberId {
-    constructor(points = 100) {
-        this._balance = points;
+class Membership {
+    constructor(type, borrowedAmount, loans = []) {
+        this._type = type;
+        this._borrowedAmount = loans.length;
+        this._loans = loans;
     }
 
-    get balance() {
-        return this._balance;
+    get borrowedAmount() {
+        return this._borrowedAmount;
     }
 
-    set balance(balance) {
-        this._balance = balance;
+    set borrowedBooks(borrowedAmount) {
+        this._borrowedAmount = borrowedAmount;
     }
 
-    addPoints(points) {
-        return this.balance += points;
+    addLoan(loan) {
+        this._loans.push(loan);
     }
 
-    deductPoints(points) {
-        return this.balance -= points;
-    }
+
 }
 
 class BookItem {
-    constructor(name, isbn_num, ret_due_date) {
+    constructor(name, authorName, isbn_num, chargePerDay = 0.5, maxCharge = 20) {
         this.name = name;
+        this.authorName = authorName;
         this.isbn_num = isbn_num;
-        this.ret_due_date = ret_due_date;
-
+        // this.ret_due_date = ret_due_date;
+        this.chargePerDay = chargePerDay;
+        this.maxCharge = maxCharge;
     }
 }
 
+class Loan {
+    constructor(book, startDate, dueDate, totalCharge) {
+        this.book = book;
+        this.startDate = startDate;
+        this.dueDate = dueDate;
+        this.totalCharge = totalCharge;
+    }
+
+    computeCharge(returnDate) {
+        if (returnDate > this.dueDate) {
+            let durationInDays =
+                Math.round(returnDate - this.dueDate) / (1000 * 60 * 60 * 24);
+            let totalCharge = durationInDays * 0.5;
+            return totalCharge > 20 ? 20 : totalCharge;
+        } else return 0.0;
+    }
+}
 
 class Library {
     constructor(bookItems, students) {
@@ -83,7 +102,7 @@ class Library {
     }
 
     addBookItem(newBookItem) {
-        this.BookItems.set(newBookItem.name, newBookItem);
+        this.bookItems.set(newBookItem.name, newBookItem);
     }
 
     addStudent(newStudent) {
@@ -93,31 +112,43 @@ class Library {
 
 // function membership(){
 //     let membersarr = {};
-//     let John = membersarr.push(new Student("John","abc123",new MemberId()));
-//     let Jack = membersarr.push(new Student("Jack","abcabc",new MemberId()));
-//     let simo = membersarr.push(new Student("simo","abc123",new MemberId()));
+//     let John = membersarr.push(new Student("John","abc123",new membership()));
+//     let Jack = membersarr.push(new Student("Jack","abcabc",new membership()));
+//     let simo = membersarr.push(new Student("simo","abc123",new membership()));
 //     for()
 // }
 
 
 
 const bookItems = new Map();
-bookItems.set("Book 1", new BookItem("A Smarter Way To Learn Javascript", "091-4568221199", "Nov-1-2020"));
-bookItems.set("Book 2", new BookItem("A Smarter Way To Learn HTML & CSS", "078-3948274976", "Nov-1-2020"));
-bookItems.set("Book 3", new BookItem("Automate The Boring Stuff With Python", "082-7402299356", "Nov-1-2020"));
-bookItems.set("Book 4", new BookItem("The Alchemist", "082-7402299356", "Nov-1-2020"));
+bookItems.set("Book 1", new BookItem("A Smarter Way To Learn Javascript", "Mark Myers", "091-4568221199", this.chargePerDay, this.startDate));
+bookItems.set("Book 2", new BookItem("A Smarter Way To Learn HTML & CSS", "Mark Myers", "078-3948274976", this.chargePerDay, this.startDate));
+bookItems.set("Book 3", new BookItem("Automate The Boring Stuff With Python", "Al Sweigart", "082-7402299356", this.chargePerDay, this.startDate));
+bookItems.set("Book 4", new BookItem("The Alchemist", "082-7402299356", "Paulo Coelho", this.chargePerDay, this.startDate));
+
+
+const loanBook = [new BookItem("A Smarter Way To Learn Javascript", "Mark Myers", "091-4568221199", this.chargePerDay, this.startDate),
+new BookItem("A Smarter Way To Learn HTML & CSS", "Mark Myers", "078-3948274976", this.chargePerDay, this.startDate),
+new BookItem("Automate The Boring Stuff With Python", "Al Sweigart", "082-7402299356", this.chargePerDay, this.startDate),
+new BookItem("The Alchemist", "082-7402299356", "Paulo Coelho", this.chargePerDay, this.startDate),];
+
 
 const students = new Map();
-students.set("John", new Student("John", "abc123", new MemberId()));
+students.set("John", new Student("John", "abc123", new Membership("Student", this.borrowedAmount, [new Loan(loanBook[0].bookName, new Date(2020, 08, 1), new Date(2020, 09, 2), this.totalCharge), new Loan(loanBook[1].bookName, new Date(2020, 08, 1), new Date(2020, 09, 2), this.totalCharge)])));
 
+students.set("Jack", new Student("Jack", "abcabc", new Membership("Faculty", this.borrowedAmount)));
 const library = new Library(bookItems, students);
-library.addStudent(new Student("Jack", "abcabc", new MemberId()));
+//library.addStudent(new Student("Jack", "abcabc", new Membership()));
+
+
+
+
 
 // function main() {
 //     const JOHN = Library.students.get("John");
 //     JOHN.buyBookItem(Library.bookItems.get("pizza"));
 //     JOHN.purchasePoints(50);
-//     console.log(JOHN.memberId.balance);
+//     console.log(JOHN.membership.balance);
 //     try {
 //         for (let i = 0; i < 10; i++) {
 //             JOHN.buyBookItem(Library.bookItems.get("pizza"));
@@ -129,7 +160,7 @@ library.addStudent(new Student("Jack", "abcabc", new MemberId()));
 //             throw e;
 //         }
 //     }
-//     console.log(JOHN.memberId.balance);
+//     console.log(JOHN.membership.balance);
 
 // }
 // main();

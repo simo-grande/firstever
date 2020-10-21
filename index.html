@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>MIU LIBRARY HOMEPAGE</title>
     <link href="./style.css" rel="stylesheet" />
     <script src="./library.js"></script>
     <script src="./action.js"></script>
@@ -17,6 +17,7 @@
         <input type="text" id="student_name" />
         <button onclick="pullInfo()">Pull Info</button><span id="info">Enter your name and click Pull Info
             button</span><br /> -->
+        <h2>Library's book list:</h2>
         <button onclick="add(event)" value="Book 1"><img src="./images/Book 1.jpg" width="150" height="200" /></button>
         <button onclick="add(event)" value="Book 2"><img src="./images/Book 2.jpg" width="150" height="200" /></button>
         <button onclick="add(event)" value="Book 3"><img src="./images/Book 3.jpg" width="150" height="200"></button>
@@ -25,14 +26,17 @@
         <table id="shopping_cart">
             <caption>Selected Books Cart</caption>
             <tr>
-                <th>Item</th>
-                <th>Return Due Date</th>
-                <th>ISBN number</th>
-
+                <th>Book Name</th>
+                <th>Author Name</th>
+                <th>ISBN Number</th>
+                <th>Charge per Day</th>
+                <th>Borrow date</th>
+                <th>Due Date</th>
             </tr>
         </table>
 
-        <br /><br /><button id="btn-purchase" onclick="makePurchase()">Purchase</button>
+        <br /><br /><button id="btn-purchase" onclick="borrowBook()">Purchase</button>
+        <button  id="rtn-book"  onclick="returnBook()">Return Books</button>
         <button id="btn-reset" onclick="resetShoppingCart()">Reset</button>
     </div>
 </body>
