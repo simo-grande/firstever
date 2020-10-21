@@ -2,43 +2,57 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIU LIBRARY HOMEPAGE</title>
-    <link href="./style.css" rel="stylesheet" />
-    <script src="./library.js"></script>
-    <script src="./action.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="action.js"></script>
+    <script src="library.js"></script>
+    <link href="style.css" rel="stylesheet">
+    <title>MIU E-Book Library</title>
 </head>
 
 <body>
-    <div id="main">
-        <h1>Welcome to MIU Library</h1>
-        <!-- <label>Please enter your name if you are a member:</label>
-        <input type="text" id="student_name" />
-        <button onclick="pullInfo()">Pull Info</button><span id="info">Enter your name and click Pull Info
-            button</span><br /> -->
-        <h2>Library's book list:</h2>
-        <button onclick="add(event)" value="Book 1"><img src="./images/Book 1.jpg" width="150" height="200" /></button>
-        <button onclick="add(event)" value="Book 2"><img src="./images/Book 2.jpg" width="150" height="200" /></button>
-        <button onclick="add(event)" value="Book 3"><img src="./images/Book 3.jpg" width="150" height="200"></button>
-        <button onclick="add(event)" value="Book 4"><img src="./images/alchemist.jpg" width="150" height="200"></button>
+    <h1>Welcome to MIU E-Book Library</h1>
+    <label>Please enter your name:</label><br />
+    <input type="text" id="member_name" /><br />
+    <label>Please enter your password:</label><br />
+    <input type="password" id="member_password" /><br />
 
-        <table id="shopping_cart">
-            <caption>Selected Books Cart</caption>
-            <tr>
-                <th>Book Name</th>
-                <th>Author Name</th>
-                <th>ISBN Number</th>
-                <th>Charge per Day</th>
-                <th>Borrow date</th>
-                <th>Due Date</th>
-            </tr>
-        </table>
+    <button onclick="login(); this.onclick=null">Login</button><button onclick="register()">Register</button><br />
+    <span id="info"></span><br />
+    <span id="account_info"></span><br />
+    <span id="borrow_info"></span><br />
 
-        <br /><br /><button id="btn-purchase" onclick="borrowBook()">Purchase</button>
-        <button  id="rtn-book"  onclick="returnBook()">Return Books</button>
-        <button id="btn-reset" onclick="resetShoppingCart()">Reset</button>
-    </div>
+
+    <h2>Library's Book List:</h2>
+    <button onclick="add(event); this.onclick=null" value="javascript"><img src="./images/javascript.jpg" width="245"
+            height="327"></button>
+    <button onclick="add(event); this.onclick=null" value="html"><img src="./images/html.jpg" width="245"
+            height="327"></button>
+    <button onclick="add(event); this.onclick=null" value="python"><img src="./images/python.jpg" width="245"
+            height="327"></button>
+    <button onclick="add(event); this.onclick=null" value="ios"><img src="./images/ios.jpg" width="245"
+            height="327"></button>
+    <table id="book_cart">
+        <caption>Your Book Cart:</caption>
+        <tr>
+            <th>Book Name</th>
+            <th>Author Name</th>
+            <th>ISBN Number</th>
+            <th>Charge per Day (USD)</th>
+            <th>Borrow date</th>
+            <th>Due Date</th>
+
+
+
+
+
+        </tr>
+    </table>
+    <button onclick="borrowBook()">Borrow Books</button><button onclick="returnBook()">Return Books</button><button
+        onclick="checkAccount()">Check Account Info</button><button onclick="resetCart()">Reset Book
+        Cart</button><button onclick="logout()">Logout</button>
+
+
 </body>
 
 </html>

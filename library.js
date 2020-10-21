@@ -1,11 +1,9 @@
-class ApplicationError extends Error { };
-
-class Student {
+class ApplicationError extends Error { }
+class Member {
     constructor(name, password, membership) {
         this._name = name;
-        this.password = password;
+        this._password = password;
         this._membership = membership;
-
     }
 
     get name() {
@@ -15,9 +13,11 @@ class Student {
     set name(name) {
         this._name = name;
     }
+
     get password() {
         return this._password;
     }
+
     set password(password) {
         this._password = password;
     }
@@ -30,18 +30,9 @@ class Student {
         this._membership = membership;
     }
 
-
     borrowBook(books) {
-        this.account.addBooks(books);
+        this._account.addBooks(books);
     }
-
-    // buyBookItem(bookItem) {
-    //     if (this.membership.balance >= bookItem.ret_due_date) {
-    //         this.membership.deductPoints(bookItem.ret_due_date);
-    //     } else {
-    //         throw new ApplicationError("Insufficient Balance.");
-    //     }
-    // }
 }
 
 class Membership {
@@ -62,23 +53,22 @@ class Membership {
     addLoan(loan) {
         this._loans.push(loan);
     }
-
-
 }
 
 class BookItem {
-    constructor(name, authorName, isbn_num, chargePerDay = 0.5, maxCharge = 20) {
-        this.name = name;
+    constructor(bookName, authorName, isbn, chargePerDay = 0.5, maxCharge = 20) {
+        this.bookName = bookName;
         this.authorName = authorName;
-        this.isbn_num = isbn_num;
-        // this.ret_due_date = ret_due_date;
+        this.isbn = isbn;
         this.chargePerDay = chargePerDay;
         this.maxCharge = maxCharge;
     }
 }
 
-class Loan {
-    constructor(book, startDate, dueDate, totalCharge) {
+class Loan extends BookItem {
+    constructor(book, startDate, dueDate, chargePerDay, maxCharge, totalCharge) {
+        super(chargePerDay, maxCharge);
+
         this.book = book;
         this.startDate = startDate;
         this.dueDate = dueDate;
@@ -89,78 +79,127 @@ class Loan {
         if (returnDate > this.dueDate) {
             let durationInDays =
                 Math.round(returnDate - this.dueDate) / (1000 * 60 * 60 * 24);
-            let totalCharge = durationInDays * 0.5;
-            return totalCharge > 20 ? 20 : totalCharge;
+            let totalCharge = durationInDays * this.chargePerDay;
+            return totalCharge > this.maxCharge ? this.maxCharge : totalCharge;
         } else return 0.0;
     }
 }
 
 class Library {
-    constructor(bookItems, students) {
+    constructor(bookItems, members) {
         this.bookItems = bookItems;
-        this.students = students;
+        this.members = members;
     }
 
     addBookItem(newBookItem) {
         this.bookItems.set(newBookItem.name, newBookItem);
     }
-
-    addStudent(newStudent) {
-        this.students.set(newStudent.name, newStudent);
+    addMember(newMember) {
+        this.members.set(newMember.name, newMember);
     }
 }
 
-// function membership(){
-//     let membersarr = {};
-//     let John = membersarr.push(new Student("John","abc123",new membership()));
-//     let Jack = membersarr.push(new Student("Jack","abcabc",new membership()));
-//     let simo = membersarr.push(new Student("simo","abc123",new membership()));
-//     for()
-// }
-
-
-
 const bookItems = new Map();
-bookItems.set("Book 1", new BookItem("A Smarter Way To Learn Javascript", "Mark Myers", "091-4568221199", this.chargePerDay, this.startDate));
-bookItems.set("Book 2", new BookItem("A Smarter Way To Learn HTML & CSS", "Mark Myers", "078-3948274976", this.chargePerDay, this.startDate));
-bookItems.set("Book 3", new BookItem("Automate The Boring Stuff With Python", "Al Sweigart", "082-7402299356", this.chargePerDay, this.startDate));
-bookItems.set("Book 4", new BookItem("The Alchemist", "082-7402299356", "Paulo Coelho", this.chargePerDay, this.startDate));
+bookItems.set(
+    "javascript",
+    new BookItem(
+        "A Smarter Way To Learn Javascript",
+        "Mark Myers",
+        "978-1497408180",
+        this.chargePerDay,
+        this.startDate
+    )
+);
+bookItems.set(
+    "python",
+    new BookItem(
+        "Automate The Boring Stuff With Python",
+        "Al Sweigart",
+        "978-1593275990",
+        this.chargePerDay,
+        this.startDate
+    )
+);
+bookItems.set(
+    "html",
+    new BookItem(
+        "A Smarter Way To Learn HTML & CSS",
+        "Mark Myers",
+        "978-1508673873",
+        this.chargePerDay,
+        this.startDate
+    )
+);
+bookItems.set(
+    "ios",
+    new BookItem(
+        "Beginning IOS13 & Swift App Development",
+        "Greg Lim",
+        "978-1670294661",
+        this.chargePerDay,
+        this.startDate
+    )
+);
 
+const loanBook = [
+    new BookItem(
+        "A Smarter Way To Learn Javascript",
+        "Mark Myers",
+        "978-1497408180",
+        this.chargePerDay,
+        this.startDate
+    ),
+    new BookItem(
+        "Automate The Boring Stuff With Python",
+        "Al Sweigart",
+        "978-1593275990",
+        this.chargePerDay,
+        this.startDate
+    ),
+    new BookItem(
+        "A Smarter Way To Learn HTML & CSS",
+        "Mark Myers",
+        "978-1508673873",
+        this.chargePerDay,
+        this.startDate
+    ),
+    new BookItem(
+        "Beginning IOS13 & Swift App Development",
+        "Greg Lim",
+        "978-1670294661",
+        this.chargePerDay,
+        this.startDate
+    ),
+];
 
-const loanBook = [new BookItem("A Smarter Way To Learn Javascript", "Mark Myers", "091-4568221199", this.chargePerDay, this.startDate),
-new BookItem("A Smarter Way To Learn HTML & CSS", "Mark Myers", "078-3948274976", this.chargePerDay, this.startDate),
-new BookItem("Automate The Boring Stuff With Python", "Al Sweigart", "082-7402299356", this.chargePerDay, this.startDate),
-new BookItem("The Alchemist", "Paulo Coelho", "082-7402299356", this.chargePerDay, this.startDate),];
+const members = new Map();
+members.set(
+    "John",
+    new Member(
+        "John",
+        "abcabc",
+        new Membership("Student", this.borrowedAmount, [
+            new Loan(
+                loanBook[0].bookName,
+                new Date(2020, 08, 1),
+                new Date(2020, 09, 2),
+                this.totalCharge
+            ),
+            new Loan(
+                loanBook[1].bookName,
+                new Date(2020, 08, 1),
+                new Date(2020, 09, 2),
+                this.totalCharge
+            ),
+        ])
+    )
+);
 
+members.set(
+    "Jack",
+    new Member("Jack", "defdef", new Membership("Faculty", this.borrowedAmount))
+);
 
-const students = new Map();
-students.set("John", new Student("John", "abc123", new Membership("Student", this.borrowedAmount, [new Loan(loanBook[0].bookName, new Date(2020, 08, 1), new Date(2020, 09, 2), this.totalCharge), new Loan(loanBook[1].bookName, new Date(2020, 08, 1), new Date(2020, 09, 2), this.totalCharge)])));
-
-students.set("Jack", new Student("Jack", "abcabc", new Membership("Faculty", this.borrowedAmount)));
-const library = new Library(bookItems, students);
-//library.addStudent(new Student("Jack", "abcabc", new Membership()));
-
-
-
-
-
-// function main() {
-//     const JOHN = Library.students.get("John");
-//     JOHN.buyBookItem(Library.bookItems.get("pizza"));
-//     JOHN.purchasePoints(50);
-//     console.log(JOHN.membership.balance);
-//     try {
-//         for (let i = 0; i < 10; i++) {
-//             JOHN.buyBookItem(Library.bookItems.get("pizza"));
-//         }
-//     } catch (e) {
-//         if (e instanceof ApplicationError) {
-//             console.log(e.message);
-//         } else {
-//             throw e;
-//         }
-//     }
-//     console.log(JOHN.membership.balance);
-
-// }
-// main();
+console.log(bookItems);
+console.log(members);
+const library = new Library(bookItems, members);
