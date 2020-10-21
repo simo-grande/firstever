@@ -130,7 +130,7 @@ bookItems.set("Book 4", new BookItem("The Alchemist", "082-7402299356", "Paulo C
 const loanBook = [new BookItem("A Smarter Way To Learn Javascript", "Mark Myers", "091-4568221199", this.chargePerDay, this.startDate),
 new BookItem("A Smarter Way To Learn HTML & CSS", "Mark Myers", "078-3948274976", this.chargePerDay, this.startDate),
 new BookItem("Automate The Boring Stuff With Python", "Al Sweigart", "082-7402299356", this.chargePerDay, this.startDate),
-new BookItem("The Alchemist", "082-7402299356", "Paulo Coelho", this.chargePerDay, this.startDate),];
+new BookItem("The Alchemist", "Paulo Coelho", "082-7402299356", this.chargePerDay, this.startDate),];
 
 
 const students = new Map();

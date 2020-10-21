@@ -95,7 +95,7 @@ function login() {
     return window.location.href = "./index.html"
     currentStudent = member;
     currentPassword = password;
-    // displayInfo();
+   // displayInfo();
     showAccount();
     return currentStudent;
 
@@ -194,14 +194,14 @@ function borrowBook() {
 
 function returnBook() {
     let chargeArr = currentStudent.membership._loans.map(
-      (n) => +n.computeCharge(new Date()).toFixed(2)
+        (n) => +n.computeCharge(new Date()).toFixed(2)
     );
-  
+
     let finalCharge = chargeArr.reduce((a, b) => a + b);
     if (finalCharge > 0) {
-      alert(`Thank for returning books! Your total charge is $${finalCharge}`);
+        alert(`Thank for returning books! Your total charge is $${finalCharge}`);
     } else alert(`Thank for returning books on time!`);
-  }
+}
 
 
 
