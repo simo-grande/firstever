@@ -1,7 +1,8 @@
 class ApplicationError extends Error { }
 class Member {
-    constructor(name, password, membership) {
+    constructor(name, memberID, password, membership) {
         this._name = name;
+        this._memberID = memberID;
         this._password = password;
         this._membership = membership;
     }
@@ -13,7 +14,13 @@ class Member {
     set name(name) {
         this._name = name;
     }
+    get memberID() {
+        return this._memberID;
+    }
 
+    set memberID(memberID) {
+        this._memberID = memberID;
+    }
     get password() {
         return this._password;
     }
@@ -136,7 +143,7 @@ bookItems.set(
         "Beginning IOS13 & Swift App Development",
         "Greg Lim",
         "978-1670294661",
-        this.chargePerDay,
+        1,
         this.startDate
     )
 );
@@ -167,7 +174,7 @@ const loanBook = [
         "Beginning IOS13 & Swift App Development",
         "Greg Lim",
         "978-1670294661",
-        this.chargePerDay,
+        1,
         this.startDate
     ),
 ];
@@ -177,18 +184,19 @@ members.set(
     "John",
     new Member(
         "John",
+        "1111",
         "abcabc",
         new Membership("Student", this.borrowedAmount, [
             new Loan(
                 loanBook[0].bookName,
                 new Date(2020, 08, 1),
-                new Date(2020, 09, 2),
+                new Date(2020, 08, 8),
                 this.totalCharge
             ),
             new Loan(
                 loanBook[1].bookName,
-                new Date(2020, 08, 1),
-                new Date(2020, 09, 2),
+                new Date(2020, 09, 10),
+                new Date(2020, 09, 17),
                 this.totalCharge
             ),
         ])
@@ -197,7 +205,12 @@ members.set(
 
 members.set(
     "Jack",
-    new Member("Jack", "defdef", new Membership("Faculty", this.borrowedAmount))
+    new Member(
+        "Jack",
+        "2222",
+        "defdef",
+        new Membership("Faculty", this.borrowedAmount)
+    )
 );
 
 console.log(bookItems);

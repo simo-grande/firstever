@@ -26,11 +26,11 @@ function updateBookSelection(bookItem) {
   td1.innerHTML = bookItem.bookName;
   td2.innerHTML = bookItem.authorName;
   td3.innerHTML = bookItem.isbn;
-  td4.innerHTML = bookItem.chargePerDay;
-  td5.innerHTML =
+  td4.innerHTML =
     date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
-  td6.innerHTML =
+  td5.innerHTML =
     date2.getMonth() + 1 + "/" + date2.getDate() + "/" + date2.getFullYear();
+  td6.innerHTML = bookItem.chargePerDay;
 
   td7.innerHTML = currentMember.membership.addLoan(
     new Loan(bookItem.bookName, date, date2)
@@ -82,6 +82,7 @@ function showAccount() {
 
 let currentMember;
 let currentPassword;
+let currentMemberID;
 
 function login() {
   let member = library.members.get(
@@ -90,14 +91,23 @@ function login() {
   let password = library.members.get(
     document.getElementById("member_password").value
   );
+  let memberID = library.members.get(
+    document.getElementById("member_ID").value
+  );
   let inputPassword = document.getElementById("member_password").value;
+  let inputMemberID = document.getElementById("member_ID").value;
 
-  if (!member || inputPassword != member.password) {
+  if (
+    !member ||
+    inputPassword != member.password ||
+    inputMemberID != member.memberID
+  ) {
     alert("Account not found. Try again!");
     return;
   }
 
   currentMember = member;
+  currentMemberID = memberID;
   currentPassword = password;
   displayInfo();
   showAccount();
@@ -108,7 +118,9 @@ function register() {
     prompt("Please enter your name: "),
     new Member(
       prompt("Please enter your name again: "),
-      prompt("Please enter your password: "),
+      prompt("Please enter your student/staff ID: "),
+
+      prompt("Please choose a password: "),
       new Membership(
         prompt("Are you a Student or Faculty: "),
         this.borrowedAmount
@@ -123,6 +135,10 @@ function displayInfo() {
 }
 
 function borrowBook() {
+  if (!document.getElementById("info").innerHTML) {
+    alert(`Please log in to borrow book`);
+    return;
+  }
   let rowLength = document.getElementById("book_cart").rows.length;
   let loanArray = currentMember.membership._loans.map(
     (n) =>
@@ -141,16 +157,24 @@ function borrowBook() {
       "/" +
       n.dueDate.getFullYear()
   );
-  if (document.getElementById("info").innerHTML.length > 0) {
+  if (document.getElementById("info").innerHTML) {
     alert(
       `Thank you ${currentMember.name}! You borrowed ${rowLength - 1} books.`
     );
     alert(`Books you are borrowing from our library are: ${loanArray}`);
     resetCart();
   }
+  document.getElementById("info").innerHTML = "";
+  document.getElementById("account_info").innerHTML = "";
+  displayInfo();
+  showAccount();
 }
 
 function returnBook() {
+  if (!document.getElementById("info").innerHTML) {
+    alert(`Please log in to return book`);
+    return;
+  }
   let chargeArr = currentMember.membership._loans.map(
     (n) => +n.computeCharge(new Date()).toFixed(2)
   );
@@ -163,9 +187,16 @@ function returnBook() {
   } else alert(`Thank you for returning books on time!`);
   currentMember.membership._loans = [];
   resetCart();
+  document.getElementById("info").innerHTML = "";
+  document.getElementById("account_info").innerHTML = "";
+  displayInfo();
 }
 
 function checkAccount() {
+  if (!document.getElementById("info").innerHTML) {
+    alert(`Please log in to check your account info`);
+    return;
+  }
   alert(
     `[${currentMember.membership._type} Account] Hi ${currentMember.name}, you are having ${currentMember.membership._loans.length} borrowed books.`
   );
